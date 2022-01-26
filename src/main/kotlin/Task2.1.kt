@@ -15,21 +15,37 @@ fun main(args: Array<String>) {
     if (line != null) {
         val numberOfPrimes = line.toInt()
         if (numberOfPrimes == 0) return
+        if (numberOfPrimes == 1) {
+            println("1: 2")
+            return
+        } else {
+            println("1: 2")
+            println("2: 3")
+        }
 
-        var i = 0
-        var j = 2
+        var i = 2
+        var j = 5
         while (i < numberOfPrimes) {
-            while (!isPrime(j)) j++
-            print("$j ")
+            while (!isPrime(j)) j += 2
+            println("${i+1}: $j")
             i++
-            j++
+            j += 2
         }
     }
 }
 
 fun isPrime(number: Int): Boolean {
-    if (number < 2) return false
-    val halfNumber: Int = number / 2
-    for (i in 2..halfNumber) if (number % i == 0) return false
-    return true
+    if (number < 2 || (number % 2 == 0)) return false
+
+    var numbersArray = arrayOf<Int>()
+    for (i in 3..number+1 step 2) {
+        numbersArray += i
+    }
+    var currentPrime = numbersArray[0]
+    while (currentPrime*currentPrime <= number) {
+        numbersArray = numbersArray.filterNot { value -> value % currentPrime == 0 }.toTypedArray()
+        if (numbersArray.isEmpty()) return false
+        currentPrime = numbersArray[0]
+    }
+    return numbersArray.last() == number
 }
