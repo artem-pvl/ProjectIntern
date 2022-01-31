@@ -20,8 +20,8 @@ fun main() {
 
 fun filterByFor(arr: Array<Int>) {
     for ((index, value) in arr.withIndex()) {
-        val prevValue = if (index - 1 < 0) value - 1 else arr[index - 1]
-        val nextValue = if (index + 1 >= arr.size) value - 1 else arr[index + 1]
+        val prevValue = getPrevValue(arr, index)
+        val nextValue = getNextValue(arr, index)
         if (value > prevValue && value > nextValue) print("$value ")
     }
     println()
@@ -31,8 +31,8 @@ fun filterByWhile(arr: Array<Int>) {
     var index = 0
     while (index < arr.size) {
         val value = arr[index]
-        val prevValue = if (index - 1 < 0) value - 1 else arr[index - 1]
-        val nextValue = if (index + 1 >= arr.size) value - 1 else arr[index + 1]
+        val prevValue = getPrevValue(arr, index)
+        val nextValue = getNextValue(arr, index)
         if (value > prevValue && value > nextValue) print("$value ")
         index++
     }
@@ -42,10 +42,18 @@ fun filterByWhile(arr: Array<Int>) {
 fun filterByForEach(arr: Array<Int>) {
     arr.forEachIndexed { index, value ->
         print(
-            if (value > (if (index - 1 < 0) value - 1 else arr[index - 1])
-                && value > (if (index + 1 >= arr.size) value - 1 else arr[index + 1])
-            ) value.toString() + " " else ""
+            if (value > getPrevValue(arr, index)
+                && value > getNextValue(arr, index)
+            ) "$value " else ""
         )
     }
     println()
+}
+
+fun getPrevValue(arr: Array<Int>, currentIndex: Int): Int {
+    return if (currentIndex - 1 < 0) arr[currentIndex] - 1 else arr[currentIndex - 1]
+}
+
+fun getNextValue(arr: Array<Int>, currentIndex: Int): Int {
+    return if (currentIndex + 1 >= arr.size) arr[currentIndex] - 1 else arr[currentIndex + 1]
 }
