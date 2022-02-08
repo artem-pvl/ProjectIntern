@@ -30,30 +30,63 @@ class NumArray(val arrayOfNumbers: Array<Int>) {
     }
 
     fun getMulOfRange(): Int {
-        var minIndex = 0
-        var maxIndex = arrayOfNumbers.lastIndex
-        var minValue = arrayOfNumbers.first()
-        var maxValue = arrayOfNumbers.last()
-        arrayOfNumbers.forEachIndexed { index, elem ->
-            if (abs(elem) < minValue) {
-                minValue = abs(elem)
-                minIndex = index
+        val absArray = arrayOfNumbers.map { abs(it) }
+        val min = absArray.minOrNull() ?: 0
+        val max = absArray.maxOrNull() ?: 0
+        val minIndexFirst = absArray.indexOfFirst { it == min }
+        val minIndexLast = absArray.indexOfLast { it == min }
+        val maxIndexFirst = absArray.indexOfFirst { it == max }
+        val maxIndexLast = absArray.indexOfLast { it == max }
+
+        val minDistance = Array(4) { 0 }
+        minDistance[0] = abs(minIndexFirst - maxIndexFirst)
+        minDistance[1] = abs(minIndexFirst - maxIndexLast)
+        minDistance[2] = abs(minIndexLast - maxIndexFirst)
+        minDistance[3] = abs(minIndexLast - maxIndexLast)
+
+        var distanceIndex = 0
+        var minValue = 0
+        minDistance.forEachIndexed { index, elem ->
+            if (elem < minValue) {
+                minValue = elem
+                distanceIndex = index
             }
-            if (abs(elem) > maxValue) {
-                maxValue = abs(elem)
-                maxIndex = index
+        }
+
+        var startIndex = 0
+        var stopIndex = 0
+        when (distanceIndex) {
+            0 -> {
+                startIndex = minIndexFirst
+                stopIndex = maxIndexFirst
             }
+            1 -> {
+                startIndex = minIndexFirst
+                stopIndex = maxIndexLast
+            }
+            2 -> {
+                startIndex = minIndexLast
+                stopIndex = maxIndexFirst
+            }
+            3 -> {
+                startIndex = minIndexLast
+                stopIndex = maxIndexLast
+            }
+        }
+        if (startIndex > stopIndex) {
+            val tmp = startIndex
+            startIndex = stopIndex
+            stopIndex = tmp
         }
 
         var mul = 1
-        for (elem in minIndex..maxIndex) {
+        for (elem in startIndex..stopIndex) {
             mul *= arrayOfNumbers[elem]
         }
-
         return mul
     }
 
     fun getAverage(): Double {
-        return arrayOfNumbers.reduce{ sum, elem -> sum + elem }.toDouble() / arrayOfNumbers.size
+        return arrayOfNumbers.average()
     }
 }
