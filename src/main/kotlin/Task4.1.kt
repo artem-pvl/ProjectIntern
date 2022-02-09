@@ -2,6 +2,7 @@ import kotlin.math.abs
 
 fun main() {
     val arrayOfNumbers = Array(10) { _ -> (-20..20).random() }
+//    val arrayOfNumbers = arrayOf(-9, 2, 8, 4, 1, 3, 6, 8, 2, 5, -9)
 
     println("Random string:")
     arrayOfNumbers.forEach { i -> print("$i ") }
@@ -30,57 +31,57 @@ class NumArray(val arrayOfNumbers: Array<Int>) {
     }
 
     fun getMulOfRange(): Int {
-        val absArray = arrayOfNumbers.map { abs(it) }
-        val min = absArray.minOrNull() ?: 0
-        val max = absArray.maxOrNull() ?: 0
-        val minIndexFirst = absArray.indexOfFirst { it == min }
-        val minIndexLast = absArray.indexOfLast { it == min }
-        val maxIndexFirst = absArray.indexOfFirst { it == max }
-        val maxIndexLast = absArray.indexOfLast { it == max }
-
-        val minDistance = Array(4) { 0 }
-        minDistance[0] = abs(minIndexFirst - maxIndexFirst)
-        minDistance[1] = abs(minIndexFirst - maxIndexLast)
-        minDistance[2] = abs(minIndexLast - maxIndexFirst)
-        minDistance[3] = abs(minIndexLast - maxIndexLast)
-
-        var distanceIndex = 0
-        var minValue = 0
-        minDistance.forEachIndexed { index, elem ->
-            if (elem < minValue) {
-                minValue = elem
-                distanceIndex = index
-            }
+        var minAbsValue = abs(arrayOfNumbers.first())
+        var maxAbsValue = abs(arrayOfNumbers.first())
+        arrayOfNumbers.forEach { elem ->
+            if (minAbsValue > abs(elem)) minAbsValue = abs(elem)
+            if (maxAbsValue < abs(elem)) maxAbsValue = abs(elem)
         }
-
+//        println("Min: $minAbsValue max: $maxAbsValue")
+        var minDistance = arrayOfNumbers.size
         var startIndex = 0
-        var stopIndex = 0
-        when (distanceIndex) {
-            0 -> {
-                startIndex = minIndexFirst
-                stopIndex = maxIndexFirst
+        var stopIndex = arrayOfNumbers.size
+        for ((index, value) in arrayOfNumbers.withIndex()) {
+            if (abs(value) == minAbsValue) {
+                var findNext = true
+                var i = index + 1
+                while (findNext && (i < arrayOfNumbers.size)) {
+                    if (abs(arrayOfNumbers[i]) == maxAbsValue) {
+                        val distance = abs(index - i)
+                        if (minDistance > distance) {
+                            minDistance = distance
+                            startIndex = index
+                            stopIndex = i
+//                            println("Start: $startIndex stop: $stopIndex dist: $minDistance")
+                        }
+                        findNext = false
+                    }
+                    i++
+                }
             }
-            1 -> {
-                startIndex = minIndexFirst
-                stopIndex = maxIndexLast
-            }
-            2 -> {
-                startIndex = minIndexLast
-                stopIndex = maxIndexFirst
-            }
-            3 -> {
-                startIndex = minIndexLast
-                stopIndex = maxIndexLast
+            if (abs(value) == maxAbsValue) {
+                var findNext = true
+                var i = index + 1
+                while (findNext && (i < arrayOfNumbers.size)) {
+                    if (abs(arrayOfNumbers[i]) == minAbsValue) {
+                        val distance = abs(index - i)
+                        if (minDistance > distance) {
+                            minDistance = distance
+                            startIndex = index
+                            stopIndex = i
+//                            println("Start: $startIndex stop: $stopIndex dist: $minDistance")
+                        }
+                        findNext = false
+                    }
+                    i++
+                }
             }
         }
-        if (startIndex > stopIndex) {
-            val tmp = startIndex
-            startIndex = stopIndex
-            stopIndex = tmp
-        }
+//        println("final Start: $startIndex stop: $stopIndex dist: $minDistance")
+        if (minDistance <= 1) return 0
 
         var mul = 1
-        for (elem in startIndex..stopIndex) {
+        for (elem in startIndex + 1 until stopIndex) {
             mul *= arrayOfNumbers[elem]
         }
         return mul
