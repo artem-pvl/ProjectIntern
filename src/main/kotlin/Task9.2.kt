@@ -1,8 +1,8 @@
 fun main() {
-    val arrayOfNumbers = MutableList(10) { (-50..50).random() }
-    println(arrayOfNumbers)
-    arrayOfNumbers.forEachIndexed { index, i ->
-        if (i > 0) arrayOfNumbers[index] = -i
+    val mListOfNumbers = MutableList(10) { (-50..50).random() }
+    println(mListOfNumbers)
+    mListOfNumbers.forEachIndexed { index, i ->
+        if (i > 0) mListOfNumbers[index] = -i
     }
-    println(arrayOfNumbers)
+    println(mListOfNumbers)
 }
