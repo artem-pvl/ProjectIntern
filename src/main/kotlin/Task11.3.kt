@@ -6,7 +6,9 @@ fun main() {
         |Идейные соображения высшего порядка, а также сложившаяся структура организации в значительной степени 
         |обуславливает создание позиций, занимаемых участниками в отношении поставленных задач.""".trimMargin()
 
-    val lambda = { it: String -> it.replace(oldValue = ",", newValue = " блин") }
+    val lambda = { it: String ->
+        it.replace(oldValue = ",", newValue = " блин")
+    }
 
     val converted = messageConverter(message, lambda)
 }
