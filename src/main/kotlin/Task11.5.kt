@@ -2,10 +2,10 @@ fun main() {
     val message = "!ADWS 1adws r"
     val ufo = Ufo(x = 0, y = 0)
 
-    val moveLeft = { it: Int -> ufo.move(Command1.Left(it)) }
-    val moveRight = { it: Int -> ufo.move(Command1.Right(it)) }
-    val moveUp = { it: Int -> ufo.move(Command1.Up(it)) }
-    val moveDown = { it: Int -> ufo.move(Command1.Down(it)) }
+    val moveLeft = { step: Int -> ufo.move(Command1.Left(step)) }
+    val moveRight = { step: Int -> ufo.move(Command1.Right(step)) }
+    val moveUp = { step: Int -> ufo.move(Command1.Up(step)) }
+    val moveDown = { step: Int -> ufo.move(Command1.Down(step)) }
     messageParse(
         encryptedMessage = message,
         eventUp = moveUp,
