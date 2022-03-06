@@ -1,7 +1,9 @@
 fun main() {
     println("Начало main")
-    imitationTwo()
-    imitationOne()
+    Thread{
+        imitationTwo()
+        imitationOne()
+    }.start()
     println("Конец main")
 }
 
